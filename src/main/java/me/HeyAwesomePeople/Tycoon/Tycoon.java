@@ -1,5 +1,8 @@
 package me.HeyAwesomePeople.Tycoon;
 
+import lombok.Getter;
+import me.HeyAwesomePeople.Tycoon.players.PlayerData;
+import me.HeyAwesomePeople.Tycoon.players.PlayerManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -8,9 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Tycoon extends JavaPlugin {
 
+    @Getter private PlayerManager playerManager;
+
     @Override
     public void onEnable() {
-
+        playerManager = new PlayerManager(this);
     }
 
     @Override

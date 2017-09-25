@@ -1,5 +1,8 @@
 package me.HeyAwesomePeople.Tycoon.players;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.UUID;
 
 /**
@@ -8,12 +11,15 @@ import java.util.UUID;
  */
 public class PlayerData {
 
-    private String playerName;
-    private UUID playerID;
+    @Getter @Setter private String playerName;
+    @Getter private UUID playerID;
 
-    public PlayerData(UUID playerID) {
+    @Getter @Setter private PlayerRole role;
+
+    public PlayerData(UUID playerID, String playerName, PlayerRole role) {
         this.playerID = playerID;
+        this.playerName = playerName;
+        this.role = role;
     }
-
 
 }
