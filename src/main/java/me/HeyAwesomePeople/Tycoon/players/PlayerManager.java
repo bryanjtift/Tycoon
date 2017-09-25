@@ -15,6 +15,7 @@ public class PlayerManager {
         this.plugin = plugin;
     }
 
+    public void save() {
 
-
+    }
 }

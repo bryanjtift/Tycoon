@@ -1,7 +1,6 @@
 package me.HeyAwesomePeople.Tycoon;
 
 import lombok.Getter;
-import me.HeyAwesomePeople.Tycoon.players.PlayerData;
 import me.HeyAwesomePeople.Tycoon.players.PlayerManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,7 +19,7 @@ public class Tycoon extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        playerManager.save();
     }
 
 }
