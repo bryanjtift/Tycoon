@@ -1,22 +1,48 @@
 package me.HeyAwesomePeople.Tycoon.mongodb;
 
+import com.mongodb.async.SingleResultCallback;
+import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
+import me.HeyAwesomePeople.Tycoon.utils.Debug;
+import me.HeyAwesomePeople.Tycoon.utils.DebugType;
+import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MongoDBManager {
 
-    private HashMap<String, MongoDatabase> databases = new HashMap<String, MongoDatabase>();
+    public static String MONGO_DATABASE = "tycoon";
+    public static String COLL_USERDATA = "userdata";
+
+    private MongoDatabase database;
+    private HashMap<String, MongoCollection> collections = new HashMap<String, MongoCollection>();
 
     public MongoDBManager() {
+        Debug.debug(DebugType.INFO, "Starting MongoDB client...");
+        ASyncMongoStarter starter = new ASyncMongoStarter();
+        database = starter.getDatabase(MONGO_DATABASE);
+
+        database.listCollectionNames().into(new ArrayList<String>(), new SingleResultCallback<ArrayList<String>>() {
+            public void onResult(ArrayList<String> strings, Throwable throwable) {
+                for (String coll : strings) {
+                    collections.put(coll, database.getCollection(coll));
+                }
+
+                Debug.debug(DebugType.INFO, "Loaded Collections: " + collections.keySet().toString());
+            }
+        });
+        Debug.debug(DebugType.INFO, "MongoDB successfully connected.");
     }
 
-    public void addDatabase(MongoDatabase database) {
-        databases.put(database.getName(), database);
+    public MongoCollection<Document> getCollection(String name) {
+        MongoCollection<Document> coll = database.getCollection(name);
+        collections.put(coll.getNamespace().getCollectionName(), coll);
+        return coll;
     }
 
-    public MongoDatabase getDatabase(String databaseName) {
-        return databases.get(databaseName);
+    public void delCollection(String name, SingleResultCallback<Void> callback) {
+        database.getCollection(name).drop(callback);
     }
 
 }

@@ -2,7 +2,6 @@ package me.HeyAwesomePeople.Tycoon.datamanaging;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Statistic;
 
 import java.util.UUID;
 
@@ -11,9 +10,10 @@ import java.util.UUID;
     @Getter private final static String FIELD_NAME = "statistics";
 
     @Getter private final UUID id;
-    @Getter private final UserDataManager dataManager;
+    private final UserDataManager dataManager;
 
     public void setInt(String key, int value) {
+
     }
 
     public void setString(String key, String value) {

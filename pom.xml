@@ -7,6 +7,44 @@
     <groupId>me.HeyAwesomePeople.Tycoon</groupId>
     <artifactId>Tycoon</artifactId>
     <version>1.0</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <!-- put your configurations here -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.mongodb:mongodb-driver-core</include>
+                                    <include>org.mongodb:mongodb-driver-async</include>
+                                    <include>org.mongodb:mongodb-driver</include>
+                                    <include>org.mongodb:bson</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <repositories>
         <repository>
@@ -31,6 +69,11 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-async</artifactId>
+            <version>3.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-core</artifactId>
             <version>3.5.0</version>
         </dependency>
         <dependency>

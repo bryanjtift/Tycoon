@@ -1,6 +1,5 @@
 package me.HeyAwesomePeople.Tycoon.datamanaging;
 
-import com.mongodb.async.SingleResultCallback;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +10,7 @@ import java.util.UUID;
     @Getter private final static String FIELD_NAME = "attributes";
 
     @Getter private final UUID id;
-    @Getter private final UserDataManager dataManager;
+    private final UserDataManager dataManager;
 
     public void setInt(String key, int value) {
     }
