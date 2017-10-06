@@ -6,4 +6,6 @@ package me.HeyAwesomePeople.Tycoon.damage;
  */
 public class DamageManager {
 
+
+
 }

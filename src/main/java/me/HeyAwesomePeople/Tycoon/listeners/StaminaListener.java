@@ -1,27 +1,29 @@
 package me.HeyAwesomePeople.Tycoon.listeners;
 
+import lombok.RequiredArgsConstructor;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class StaminaListener implements Listener {
 
-    private Tycoon plugin;
+    private final Tycoon plugin;
 
     private BukkitTask task;
-    private List<UUID> players = new ArrayList<UUID>();
+    private ArrayList<UUID> players = new ArrayList<>();
+    private HashMap<UUID, Integer> times = new HashMap<>();
 
     public StaminaListener(Tycoon plugin) {
         this.plugin = plugin;
-        task = new SprintingTimer(plugin).runTaskTimer(plugin, 20L, 20L);
+
+        task = new SprintingTimer().runTaskTimer(plugin, 20L, 20L);
     }
 
     public void destroyTask() {
@@ -33,22 +35,23 @@ public class StaminaListener implements Listener {
         if (e.getPlayer().isSprinting()) {
             players.add(e.getPlayer().getUniqueId());
         } else {
+
             players.remove(e.getPlayer().getUniqueId());
         }
     }
 
-    public class SprintingTimer extends BukkitRunnable {
-
-        private Tycoon plugin;
-
-        public SprintingTimer(Tycoon plugin) {
-            this.plugin = plugin;
-        }
+    @RequiredArgsConstructor private class SprintingTimer extends BukkitRunnable {
 
         public void run() {
+            //TODO show stamina information to play HUD
             for (UUID id : players) {
-
+                if (!times.containsKey(id)) {
+                    times.put(id, 1);
+                } else {
+                    times.put(id, times.get(id) + 1);
+                }
             }
+
         }
 
     }

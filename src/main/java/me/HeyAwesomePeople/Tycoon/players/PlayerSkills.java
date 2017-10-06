@@ -11,11 +11,11 @@ import java.util.UUID;
  */
 public class PlayerSkills {
 
-    @Getter private UUID playerID;
-    @Getter private HashMap<Skill, Integer> skills = new HashMap<Skill, Integer>();
+    @Getter private TycoonPlayer tycoonPlayer;
+    @Getter private HashMap<Skill, Integer> skills = new HashMap<>();
 
-    public PlayerSkills(UUID playerID) {
-        this.playerID = playerID;
+    public PlayerSkills(TycoonPlayer tycoonPlayer) {
+        this.tycoonPlayer = tycoonPlayer;
     }
 
     public void addSkillValue(Skill skill, Integer value) {
@@ -28,6 +28,10 @@ public class PlayerSkills {
 
     public int getSkill(Skill skill) {
         return skills.get(skill);
+    }
+
+    public void updateSkills() {
+
     }
 
     public enum Skill {

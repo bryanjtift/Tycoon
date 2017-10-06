@@ -3,19 +3,23 @@ package me.HeyAwesomePeople.Tycoon.datamanaging;
 import com.mongodb.async.SingleResultCallback;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.result.UpdateResult;
 import lombok.Getter;
+import lombok.Setter;
+import me.HeyAwesomePeople.Tycoon.Tycoon;
 import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
 import me.HeyAwesomePeople.Tycoon.utils.Debug;
 import me.HeyAwesomePeople.Tycoon.utils.DebugType;
 import org.bson.Document;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserDataManager {
 
+    private Tycoon plugin;
     private MongoDBManager manager;
+
+    @Setter @Getter private boolean isReady = false;
 
     @Getter private final UUID id;
     @Getter private String username;
@@ -24,47 +28,54 @@ public class UserDataManager {
     @Getter private Statistics stats;
     @Getter private Attributes attributes;
 
-    public UserDataManager(final MongoDBManager manager, UUID id, String username, final MongoCollection<Document> collection) {
-        this.manager = manager;
+    public UserDataManager(final Tycoon plugin, UUID id, String username, final MongoCollection<Document> collection) {
+        this.plugin = plugin;
+        this.manager = plugin.getMongoDBManager();
         this.id = id;
         this.username = username;
 
-        collection.find(Filters.regex("uuid", id.toString())).into(new ArrayList<>(), (documents, throwable) -> {
-            if (documents.size() == 0)
-                Debug.debug(DebugType.WARNING, "No collections found for '" + UserDataManager.this.id.toString() + "' (" + UserDataManager.this.username + ").");
+        Loader loader = new Loader(collection);
+        loader.runSync(plugin, (aBoolean, throwable) -> {
+            setReady(true);
         });
 
+        while (true) {
+            if (isReady) {
+                break;
+            }
+        }
 
         this.stats = new Statistics(this.id, this);
         this.attributes = new Attributes(this.id, this);
     }
 
-    public void setString(String key, String value) {
-        document.put(key, value);
-    }
 
-    public String getString(String key) {
-        Object object = document.get(key);
-        if (object instanceof String) {
-            return (String) object;
+    public class Loader extends BukkitRunnable {
+
+        private MongoCollection<Document> collection;
+        private SingleResultCallback<Boolean> callback;
+
+        Loader(MongoCollection<Document> collection) {
+            this.collection = collection;
         }
-        return "ERROR_NOT_STRING";
-    }
 
-    public void setInt(String key, Integer value) {
-        document.put(key, value);
-    }
-
-    public Integer getInt(String key) {
-        Object object = document.get(key);
-        if (object instanceof Integer) {
-            return (Integer) object;
+        void runSync(Tycoon plugin, SingleResultCallback<Boolean> yeah) {
+            this.runTask(plugin);
+            callback = yeah;
         }
-        return -1;
-    }
 
-    private void uploadDocument() {
-
+        @Override
+        public void run() {
+            collection.find(Filters.regex("uuid", id.toString())).first((document, throwable) -> {
+                if (document == null) {
+                    Debug.debug(DebugType.WARNING, "No documents found for '" + UserDataManager.this.id.toString() + "' (" + UserDataManager.this.username + ").");
+                    createNewDocument();
+                } else {
+                    UserDataManager.this.document = document;
+                }
+                callback.onResult(true, new Throwable());
+            });
+        }
     }
 
     private void createNewDocument() {
@@ -74,16 +85,12 @@ public class UserDataManager {
     }
 
     public void updateDocument() {
-        manager.getCollection(MongoDBManager.COLL_USERDATA).updateOne(Filters.regex("uuid", this.id.toString()), this.document, new SingleResultCallback<UpdateResult>() {
-            public void onResult(UpdateResult updateResult, Throwable throwable) {
-                if (updateResult == null) {
-                    Debug.debug(DebugType.ERROR, "Update Result Null");
-                }
-                if (id == null) {
-                    Debug.debug(DebugType.ERROR, "ID null");
-                }
-                Debug.debug(DebugType.INFO, "Updated document for '" + id.toString() + "' with " + updateResult.getModifiedCount() + " modifications, " + updateResult.getMatchedCount() + " matches, and acknowledgement was " + updateResult.wasAcknowledged());
+        manager.getCollection(MongoDBManager.COLL_USERDATA).replaceOne(Filters.regex("uuid", this.id.toString()), this.document, (updateResult, throwable) -> {
+            if (updateResult == null) {
+                Debug.debug(DebugType.ERROR, "Update Result Null");
+                return;
             }
+            Debug.debug(DebugType.INFO, "Updated document for '" + id.toString() + "' with " + updateResult.getModifiedCount() + " modifications, " + updateResult.getMatchedCount() + " matches, and acknowledgement was " + updateResult.wasAcknowledged());
         });
     }
 

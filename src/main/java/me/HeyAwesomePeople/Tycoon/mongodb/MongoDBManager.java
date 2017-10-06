@@ -16,21 +16,19 @@ public class MongoDBManager {
     public static String COLL_USERDATA = "userdata";
 
     private MongoDatabase database;
-    private HashMap<String, MongoCollection> collections = new HashMap<String, MongoCollection>();
+    private HashMap<String, MongoCollection> collections = new HashMap<>();
 
     public MongoDBManager() {
         Debug.debug(DebugType.INFO, "Starting MongoDB client...");
         ASyncMongoStarter starter = new ASyncMongoStarter();
         database = starter.getDatabase(MONGO_DATABASE);
 
-        database.listCollectionNames().into(new ArrayList<String>(), new SingleResultCallback<ArrayList<String>>() {
-            public void onResult(ArrayList<String> strings, Throwable throwable) {
-                for (String coll : strings) {
-                    collections.put(coll, database.getCollection(coll));
-                }
-
-                Debug.debug(DebugType.INFO, "Loaded Collections: " + collections.keySet().toString());
+        database.listCollectionNames().into(new ArrayList<>(), (strings, throwable) -> {
+            for (String coll : strings) {
+                collections.put(coll, database.getCollection(coll));
             }
+
+            Debug.debug(DebugType.INFO, "Loaded Collections: " + collections.keySet().toString());
         });
         Debug.debug(DebugType.INFO, "MongoDB successfully connected.");
     }

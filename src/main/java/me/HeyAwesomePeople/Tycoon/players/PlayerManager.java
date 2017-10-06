@@ -15,7 +15,12 @@ public class PlayerManager {
         this.plugin = plugin;
     }
 
-    public void save() {
-
+    public void loadPlayer(UUID id, String username) {
+        players.put(id, new TycoonPlayer(plugin, id, username));
     }
+
+    public TycoonPlayer getPlayer(UUID id) {
+        return players.get(id);
+    }
+
 }

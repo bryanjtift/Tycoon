@@ -1,4 +1,4 @@
-package me.HeyAwesomePeople.Tycoon.mongodb;
+package me.HeyAwesomePeople.Tycoon.mongodb.listeners;
 
 import com.mongodb.event.CommandFailedEvent;
 import com.mongodb.event.CommandStartedEvent;
