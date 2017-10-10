@@ -1,6 +1,7 @@
 package me.HeyAwesomePeople.Tycoon;
 
 import lombok.Getter;
+import me.HeyAwesomePeople.Tycoon.configuration.ConfigManager;
 import me.HeyAwesomePeople.Tycoon.listeners.PlayerJoinListener;
 import me.HeyAwesomePeople.Tycoon.listeners.PlayerLeaveListener;
 import me.HeyAwesomePeople.Tycoon.listeners.StaminaListener;
@@ -14,6 +15,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Tycoon extends JavaPlugin {
 
+    @Getter private ConfigManager configManager;
+
     @Getter private PlayerManager playerManager;
     @Getter private MongoDBManager mongoDBManager;
 
@@ -21,6 +24,12 @@ public class Tycoon extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        configManager = new ConfigManager(this);
+        configManager.newConfig("config");
+        configManager.newConfig("plots");
+        configManager.newConfig("worlds");
+
+
         playerManager = new PlayerManager(this);
         mongoDBManager = new MongoDBManager();
 

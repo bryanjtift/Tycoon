@@ -13,13 +13,14 @@ import org.bson.Document;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
+import java.util.Vector;
 
 public class UserDataManager {
 
     private Tycoon plugin;
     private MongoDBManager manager;
 
-    @Setter @Getter private boolean isReady = false;
+    private Vector<Boolean> isReady = new Vector<>();
 
     @Getter private final UUID id;
     @Getter private String username;
@@ -33,14 +34,15 @@ public class UserDataManager {
         this.manager = plugin.getMongoDBManager();
         this.id = id;
         this.username = username;
+        isReady.add(false);
 
         Loader loader = new Loader(collection);
         loader.runSync(plugin, (aBoolean, throwable) -> {
-            setReady(true);
+            isReady.set(0, true);
         });
 
         while (true) {
-            if (isReady) {
+            if (isReady.get(0)) {
                 break;
             }
         }

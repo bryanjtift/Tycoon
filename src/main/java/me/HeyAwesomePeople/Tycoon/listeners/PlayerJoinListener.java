@@ -5,10 +5,11 @@ import me.HeyAwesomePeople.Tycoon.Tycoon;
 import me.HeyAwesomePeople.Tycoon.datamanaging.Statistics;
 import me.HeyAwesomePeople.Tycoon.utils.Debug;
 import me.HeyAwesomePeople.Tycoon.utils.DebugType;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Date;
 
@@ -37,6 +38,12 @@ import java.util.Date;
         if (!stats.hasKey("firstlogin")) {
             stats.setString("firstlogin", String.valueOf(new Date().getTime()));
         }
+    }
+
+    @EventHandler
+    public void playerJoin(PlayerJoinEvent e) {
+
+        e.getPlayer().playSound(e.getPlayer().getLocation(), "swoosh", 10, 10);
     }
 
 }
