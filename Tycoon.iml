@@ -25,5 +25,14 @@
     <orderEntry type="library" name="Maven: org.mongodb:bson:3.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:3.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver:3.5.0" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: tes1t:x1:1.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../Dependencies/craftbukkit-1.12.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

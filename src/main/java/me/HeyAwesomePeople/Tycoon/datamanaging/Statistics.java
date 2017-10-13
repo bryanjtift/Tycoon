@@ -41,6 +41,8 @@ public class Statistics {
         document.put(key, value);
     }
 
+    public void setBoolean(String key, boolean value) { document.put(key, value); }
+
     public int getInt(String key) {
         Object obj = document.get(key);
         if (obj instanceof Integer) {
@@ -71,6 +73,14 @@ public class Statistics {
             return (double) obj;
         }
         return 0;
+    }
+
+    public boolean getBoolean(String key) {
+        Object obj = document.get(key);
+        if (obj instanceof Boolean) {
+            return (boolean) obj;
+        }
+        return false;
     }
 
 }

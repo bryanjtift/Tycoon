@@ -7,6 +7,7 @@ import me.HeyAwesomePeople.Tycoon.listeners.PlayerLeaveListener;
 import me.HeyAwesomePeople.Tycoon.listeners.StaminaListener;
 import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
 import me.HeyAwesomePeople.Tycoon.players.PlayerManager;
+import me.HeyAwesomePeople.Tycoon.setup.PlayerTutorial;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -22,6 +23,8 @@ public class Tycoon extends JavaPlugin {
 
     private StaminaListener staminaListener;
 
+    @Getter private PlayerTutorial playerTutorial;
+
     @Override
     public void onEnable() {
         configManager = new ConfigManager(this);
@@ -29,6 +32,7 @@ public class Tycoon extends JavaPlugin {
         configManager.newConfig("plots");
         configManager.newConfig("worlds");
 
+        playerTutorial = new PlayerTutorial(this);
 
         playerManager = new PlayerManager(this);
         mongoDBManager = new MongoDBManager();

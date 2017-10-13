@@ -4,7 +4,6 @@ import com.mongodb.async.SingleResultCallback;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import lombok.Getter;
-import lombok.Setter;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
 import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
 import me.HeyAwesomePeople.Tycoon.utils.Debug;

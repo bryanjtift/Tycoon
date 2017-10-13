@@ -81,6 +81,13 @@
             <artifactId>mongodb-driver</artifactId>
             <version>3.5.0</version>
         </dependency>
+        <dependency>
+            <groupId>tes1t</groupId>
+            <artifactId>x1</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>H:\BlockGame\Dependencies\craftbukkit-1.12.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
