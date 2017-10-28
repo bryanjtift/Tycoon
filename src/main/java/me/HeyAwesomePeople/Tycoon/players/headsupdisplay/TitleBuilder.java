@@ -3,6 +3,7 @@ package me.HeyAwesomePeople.Tycoon.players.headsupdisplay;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutTitle;
+import org.bukkit.ChatColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -17,17 +18,17 @@ import org.bukkit.entity.Player;
 
     private String title = "";
     private String subtitle = "";
-    private Integer fadeIn = 0;
-    private Integer stay = 0;
-    private Integer fadeOut = 0;
+    private Integer fadeIn = 20;
+    private Integer stay = 20;
+    private Integer fadeOut = 20;
 
     public TitleBuilder title(String title) {
-        this.title = title;
+        this.title = ChatColor.translateAlternateColorCodes('&', title);
         return this;
     }
 
     public TitleBuilder subtitle(String subtitle) {
-        this.subtitle = subtitle;
+        this.subtitle = ChatColor.translateAlternateColorCodes('&', subtitle);
         return this;
     }
 

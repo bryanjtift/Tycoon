@@ -1,2 +1,4 @@
 new_player:
-  location:
+  joinMsg: "&7Welcome, %player%"
+returning_player:
+  joinMsg: "&7Welcome back, %player%"

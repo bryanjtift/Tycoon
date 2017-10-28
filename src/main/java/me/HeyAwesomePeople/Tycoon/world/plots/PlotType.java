@@ -8,6 +8,7 @@ public enum PlotType {
 
     RESIDENTIAL,
     BUSINESS,
-    APARTMENT;
+    APARTMENT,
+    UNDEFINED;
 
 }

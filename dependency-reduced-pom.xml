@@ -83,6 +83,13 @@
       <version>1.16.16</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>tes1t</groupId>
+      <artifactId>x1</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>H:\BlockGame\Dependencies\craftbukkit-1.12.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>
 

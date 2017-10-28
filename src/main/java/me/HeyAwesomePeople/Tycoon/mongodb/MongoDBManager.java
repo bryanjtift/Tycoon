@@ -14,6 +14,8 @@ public class MongoDBManager {
 
     public static String MONGO_DATABASE = "tycoon";
     public static String COLL_USERDATA = "userdata";
+    public static String COLL_TYCOONDATA = "tycoondata";
+    public static String COLL_PLOTDATA = "plotdata";
 
     private MongoDatabase database;
     private HashMap<String, MongoCollection> collections = new HashMap<>();

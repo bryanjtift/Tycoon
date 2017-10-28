@@ -3,3 +3,7 @@ depend: []
 author: HeyAwesomePeople
 main: me.HeyAwesomePeople.Tycoon.Tycoon
 version: 1.0
+commands:
+  atycoon:
+    aliases: [atyc, admintycoon, at]
+    description: Admin command for Tycoon plugin

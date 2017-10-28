@@ -3,6 +3,7 @@ package me.HeyAwesomePeople.Tycoon.setup;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
 import me.HeyAwesomePeople.Tycoon.datamanaging.UserDataManager;
 import me.HeyAwesomePeople.Tycoon.players.headsupdisplay.ActionBarBuilder;
+import me.HeyAwesomePeople.Tycoon.players.headsupdisplay.TitleBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,10 +22,16 @@ public class ResourcePackApplication implements Listener {
 
         userData = plugin.getPlayerManager().getPlayer(player.getUniqueId()).getDataManager();
 
+        String packURL = plugin.getConfigManager().getConfig("config").getString("resource_pack", "");
+
         if (!userData.getAttributes().getBoolean("resourcePack")) {
-            player.setResourcePack(plugin.getConfigManager().getConfig("config").getString("resource_pack"));
+            if (!packURL.equals("")) {
+                //TODO timer to check if it worked
+                player.setResourcePack(packURL);
+            }
         } else {
-            //TODO send player a message via big letters that they have the resource pack loaded.
+            new ActionBarBuilder(plugin, player).foreverLoop().scrollerSpeed(5).message("&cFailed to load server resource pack. Run /rpack");
+            //TODO /rpack command to retry texture pack sending
         }
     }
 
