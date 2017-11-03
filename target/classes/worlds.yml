@@ -1,0 +1,4 @@
+overworld:
+  fileLocation: "worlds/Overworld"
+underworld:
+  fileLocation: "worlds/Underworld"

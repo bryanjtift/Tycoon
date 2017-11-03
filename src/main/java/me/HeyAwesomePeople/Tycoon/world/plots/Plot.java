@@ -1,10 +1,18 @@
 package me.HeyAwesomePeople.Tycoon.world.plots;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import me.HeyAwesomePeople.Tycoon.Tycoon;
+import me.HeyAwesomePeople.Tycoon.utils.LocationUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author HeyAwesomePeople
@@ -12,17 +20,38 @@ import java.util.ArrayList;
  */
 public class Plot {
 
-    private Integer plotId;
-    private ArrayList<Region> regions = new ArrayList<>();
+    private Tycoon plugin;
 
-    Plot(Integer plotId) {
+    @Getter private Integer plotId;
+
+    @Getter private PlotType plotType;
+    @Getter private Rent rent;
+    @Getter private Location address;
+    private List<Region> regions = new ArrayList<>();
+
+    Plot(Tycoon plugin, String world, Integer plotId) {
+        this.plugin = plugin;
         this.plotId = plotId;
 
-        //TODO load plot based on ID
+        Configuration config = plugin.getConfigManager().getConfig("plots");
+
+        plotType = PlotType.valueOf(config.getString("worlds." + world + ".plots." + plotId + ".plot_type"));
+        rent = new Rent(config.getLong("rent_macros." + config.getString("worlds." + world + ".plots." + plotId + ".rent") + ".frequency"), config.getInt("rent_macros." + config.getString("worlds." + world + ".plots." + plotId + ".rent") + ".cost"));
+        address = LocationUtils.stringToLocation(config.getString("worlds." + world + ".plots." + plotId + ".address"), Bukkit.getWorld(world));
+
+        for (String s : config.getStringList("worlds." + world + ".plots." + plotId + ".regions")) {
+            int[] locs = Arrays.stream(s.split(",")).map(String::trim).mapToInt(Integer::parseInt).toArray();
+
+            regions.add(new Region(Bukkit.getWorld(world),
+                    Arrays.copyOfRange(locs, 0, 3),
+                    Arrays.copyOfRange(locs, 3, 6)));
+        }
+
+        loadDatabaseInfo();
     }
 
-    public PlotType getPlotType() {
-        return PlotType.UNDEFINED;
+    private void loadDatabaseInfo() {
+        //TODO get owner, members, and lastrentpaid time
     }
 
     public boolean isPlayerInRegion(Player player) {
@@ -55,22 +84,12 @@ public class Plot {
         return false;
     }
 
+    @RequiredArgsConstructor
     public class Region {
 
-        private World world;
-        private int[] point1 = new int[3];
-        private int[] point2 = new int[3];
-
-        public Region(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
-            this.world = world;
-            this.point1[0] = x1;
-            this.point1[1] = y1;
-            this.point1[2] = z1;
-
-            this.point2[0] = x2;
-            this.point2[1] = y2;
-            this.point2[2] = z2;
-        }
+        private final World world;
+        private final int[] point1;
+        private final int[] point2;
 
         Location getPoint1() {
             return new Location(world, point1[0], point1[1], point1[2]);
@@ -82,16 +101,11 @@ public class Plot {
 
     }
 
+    @RequiredArgsConstructor
     public class ZoneVector {
-        private int x;
-        private int y;
-        private int z;
-
-        ZoneVector(int x, int y, int z) {
-            this.x = x;
-            this.z = z;
-            this.y = y;
-        }
+        private final int x;
+        private final int y;
+        private final int z;
 
         boolean isInAABB(ZoneVector min, ZoneVector max) {
             return ((this.x <= max.x) && (this.x >= min.x) && (this.z <= max.z) && (this.z >= min.z) && (this.y <= max.y) && (this.y >= min.y));
