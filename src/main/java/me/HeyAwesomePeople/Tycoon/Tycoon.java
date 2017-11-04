@@ -11,6 +11,7 @@ import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
 import me.HeyAwesomePeople.Tycoon.players.PlayerManager;
 import me.HeyAwesomePeople.Tycoon.setup.PlayerTutorial;
 import me.HeyAwesomePeople.Tycoon.world.WorldManager;
+import me.HeyAwesomePeople.Tycoon.world.plots.PlotManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -22,6 +23,7 @@ public class Tycoon extends JavaPlugin {
     @Getter private ConfigManager configManager;
 
     @Getter private WorldManager worldManager;
+    @Getter private PlotManager plotManager;
     @Getter private PlayerManager playerManager;
     @Getter private MongoDBManager mongoDBManager;
 
@@ -40,9 +42,8 @@ public class Tycoon extends JavaPlugin {
         mongoDBManager = new MongoDBManager();
 
         worldManager = new WorldManager(this);
-
+        plotManager = new PlotManager(this);
         playerTutorial = new PlayerTutorial(this);
-
         playerManager = new PlayerManager(this);
 
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);

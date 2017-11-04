@@ -1,6 +1,7 @@
 package me.HeyAwesomePeople.Tycoon.world.plots;
 
 import me.HeyAwesomePeople.Tycoon.Tycoon;
+import org.bson.Document;
 
 /**
  * @author HeyAwesomePeople
@@ -8,8 +9,8 @@ import me.HeyAwesomePeople.Tycoon.Tycoon;
  */
 public class Business extends Plot {
 
-    Business(Tycoon plugin, String world, Integer plotId) {
-        super(plugin, world, plotId);
+    Business(Tycoon plugin, String world, Integer plotId, Document document) {
+        super(plugin, world, plotId, document);
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class Rent {
 
+    @Getter private final String name;
     @Getter private final long frequency;
     @Getter private final int cost;
 
