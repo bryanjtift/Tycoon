@@ -38,7 +38,7 @@ public class WorldManager {
     private void loadWorldIfExist() {
         String worldName = plugin.getConfigManager().getConfig("worlds").getString("overworld.fileName");
         if (Bukkit.getWorld(worldName) == null) {
-            Debug.debug(DebugType.INFO, "Tycoon did not find a custom overworld, we'll just use the default..");
+            Debug.debug(DebugType.INFO, "Tycoon did not find a custom overworld, we'll just use the default.");
         }
         overworld = Bukkit.createWorld(new WorldCreator(worldName));
     }

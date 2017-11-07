@@ -84,6 +84,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.mongodb.morphia</groupId>
+      <artifactId>morphia</artifactId>
+      <version>1.3.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>tes1t</groupId>
       <artifactId>x1</artifactId>
       <version>1.0</version>

@@ -7,3 +7,6 @@ commands:
   atycoon:
     aliases: [atyc, admintycoon, at]
     description: Admin command for Tycoon plugin
+  tycoon:
+    aliases: [tyc]
+    description: Player command for Tycoon plugin

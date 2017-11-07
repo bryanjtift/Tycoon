@@ -27,7 +27,8 @@ public class StaminaListener implements Listener {
     }
 
     public void destroyTask() {
-        task.cancel();
+        if (task != null)
+            task.cancel();
     }
 
     @EventHandler

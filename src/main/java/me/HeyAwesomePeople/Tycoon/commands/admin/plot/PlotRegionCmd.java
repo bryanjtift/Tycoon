@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
 import me.HeyAwesomePeople.Tycoon.world.plots.Plot;
 import me.HeyAwesomePeople.Tycoon.world.plots.PlotType;
+import me.HeyAwesomePeople.Tycoon.world.plots.plotparts.Region;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ import org.bukkit.command.CommandSender;
     private final CommandSender sender;
     private final Plot plot;
 
-    public void add(Plot.Region region) {
+    public void add(Region region) {
         plot.addRegion(region);
 
         sender.sendMessage(""); // TODO

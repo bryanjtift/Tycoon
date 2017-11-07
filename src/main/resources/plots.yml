@@ -15,10 +15,10 @@ rent_macros:
     frequency: 604800
     cost: 25
 world:
-  world1:
+  Overworld:
     plots:
       1:
-        plot_type: residential
+        plot_type: RESIDENTIAL
         rent: rent1
         address: 0,7,4
         regions:
