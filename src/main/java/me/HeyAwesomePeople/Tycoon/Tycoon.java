@@ -7,7 +7,8 @@ import me.HeyAwesomePeople.Tycoon.configuration.ConfigManager;
 import me.HeyAwesomePeople.Tycoon.listeners.PlayerJoinListener;
 import me.HeyAwesomePeople.Tycoon.listeners.PlayerLeaveListener;
 import me.HeyAwesomePeople.Tycoon.listeners.StaminaListener;
-import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
+import me.HeyAwesomePeople.Tycoon.mongodb.ASyncMongoDBManager;
+import me.HeyAwesomePeople.Tycoon.mongodb.SyncMongoDBManager;
 import me.HeyAwesomePeople.Tycoon.players.PlayerManager;
 import me.HeyAwesomePeople.Tycoon.setup.PlayerTutorial;
 import me.HeyAwesomePeople.Tycoon.world.WorldManager;
@@ -25,7 +26,8 @@ public class Tycoon extends JavaPlugin {
     @Getter private WorldManager worldManager;
     @Getter private PlotManager plotManager;
     @Getter private PlayerManager playerManager;
-    @Getter private MongoDBManager mongoDBManager;
+    @Getter private ASyncMongoDBManager aSyncMongoDBManager;
+    @Getter private SyncMongoDBManager syncMongoDBManager;
 
     private StaminaListener staminaListener;
 
@@ -39,7 +41,8 @@ public class Tycoon extends JavaPlugin {
         configManager.newConfig("worlds");
         configManager.newConfig("permissions");
         configManager.newConfig("messages");
-        mongoDBManager = new MongoDBManager();
+        aSyncMongoDBManager = new ASyncMongoDBManager();
+        syncMongoDBManager = new SyncMongoDBManager();
 
         worldManager = new WorldManager(this);
         plotManager = new PlotManager(this);

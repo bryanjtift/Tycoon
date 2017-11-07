@@ -14,7 +14,6 @@ import java.util.HashMap;
  */
 public class Business extends Plot {
 
-
     Business(Tycoon plugin, World world, Integer id, PlotType type, Location address, HashMap<Integer, Region> regions) {
         super(plugin, world, id, type, address, regions);
     }

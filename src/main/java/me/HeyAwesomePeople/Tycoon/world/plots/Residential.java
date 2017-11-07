@@ -10,8 +10,10 @@ import java.util.HashMap;
 
 public class Residential extends Plot {
 
-
     Residential(Tycoon plugin, World world, Integer id, PlotType type, Location address, HashMap<Integer, Region> regions) {
         super(plugin, world, id, type, address, regions);
     }
+
+
+
 }

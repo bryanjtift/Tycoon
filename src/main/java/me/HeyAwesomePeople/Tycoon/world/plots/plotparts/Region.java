@@ -2,6 +2,7 @@ package me.HeyAwesomePeople.Tycoon.world.plots.plotparts;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import me.HeyAwesomePeople.Tycoon.utils.Cuboid;
 import org.bukkit.World;
 
 import java.util.ArrayList;

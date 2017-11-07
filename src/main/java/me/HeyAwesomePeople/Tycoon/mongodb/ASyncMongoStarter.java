@@ -20,22 +20,22 @@ public class ASyncMongoStarter {
 
     @Getter private MongoClient asyncMongoClient;
 
-    public ASyncMongoStarter() {
+    ASyncMongoStarter() {
         ClusterSettings clusterSettings = ClusterSettings.builder()
                 .hosts(Collections.singletonList(new ServerAddress("localhost")))
                 .build();
         ServerSettings serverSettings = ServerSettings.builder().addServerMonitorListener(new ServerConnection()).build();
         MongoClientSettings settings = MongoClientSettings.builder()
                 .clusterSettings(clusterSettings)
-                .addCommandListener(new CommandListener())
+                .addCommandListener(new CommandListener("ASYNC"))
                 .serverSettings(serverSettings)
                 .build();
         asyncMongoClient = MongoClients.create(settings);
     }
 
     public ASyncMongoStarter(String username, String password, String address, int port) {
-        MongoCredential credential = MongoCredential.createCredential(username, MongoDBManager.MONGO_DATABASE, password.toCharArray());
-        List<MongoCredential> credentials = new ArrayList<MongoCredential>();
+        MongoCredential credential = MongoCredential.createCredential(username, Database.MONGO_DATABASE.getDBName(), password.toCharArray());
+        List<MongoCredential> credentials = new ArrayList<>();
         credentials.add(credential);
         ClusterSettings clusterSettings = ClusterSettings.builder()
                 .hosts(Collections.singletonList(new ServerAddress(address, port)))
@@ -43,14 +43,14 @@ public class ASyncMongoStarter {
         ServerSettings serverSettings = ServerSettings.builder().addServerMonitorListener(new ServerConnection()).build();
         MongoClientSettings settings = MongoClientSettings.builder()
                 .clusterSettings(clusterSettings)
-                .addCommandListener(new CommandListener())
+                .addCommandListener(new CommandListener("ASYNC"))
                 .serverSettings(serverSettings)
                 .credentialList(credentials)
                 .build();
         asyncMongoClient = MongoClients.create(settings);
     }
 
-    public MongoDatabase getDatabase(String database) {
+    MongoDatabase getDatabase(String database) {
         return asyncMongoClient.getDatabase(database);
     }
 

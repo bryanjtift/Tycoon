@@ -3,8 +3,8 @@ package me.HeyAwesomePeople.Tycoon.players;
 import lombok.Getter;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
 import me.HeyAwesomePeople.Tycoon.datamanaging.UserDataManager;
-import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
-import org.bukkit.Bukkit;
+import me.HeyAwesomePeople.Tycoon.mongodb.ASyncMongoDBManager;
+import me.HeyAwesomePeople.Tycoon.mongodb.Collection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class TycoonPlayer {
         this.playerID = playerID;
         this.username = username;
 
-        this.dataManager = new UserDataManager(plugin, playerID, username, plugin.getMongoDBManager().getCollection(MongoDBManager.COLL_USERDATA));
+        this.dataManager = new UserDataManager(plugin, playerID, username, plugin.getASyncMongoDBManager().getCollection(Collection.USERDATA.getCollName()));
 
         this.skills = new PlayerSkills(this);
         // TODO setSkills

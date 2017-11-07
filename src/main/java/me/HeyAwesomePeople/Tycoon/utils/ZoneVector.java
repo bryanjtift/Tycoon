@@ -1,4 +1,4 @@
-package me.HeyAwesomePeople.Tycoon.world.plots.plotparts;
+package me.HeyAwesomePeople.Tycoon.utils;
 
 import lombok.RequiredArgsConstructor;
 

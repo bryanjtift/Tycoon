@@ -1,13 +1,15 @@
 package me.HeyAwesomePeople.Tycoon.world.plots;
 
-import com.mongodb.async.client.MongoCollection;
+import com.mongodb.client.MongoCollection;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
-import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
+import me.HeyAwesomePeople.Tycoon.economy.rent.RentManager;
+import me.HeyAwesomePeople.Tycoon.mongodb.Collection;
+import me.HeyAwesomePeople.Tycoon.mongodb.SyncMongoDBManager;
 import me.HeyAwesomePeople.Tycoon.utils.Debug;
 import me.HeyAwesomePeople.Tycoon.utils.DebugType;
 import me.HeyAwesomePeople.Tycoon.utils.LocationUtils;
 import me.HeyAwesomePeople.Tycoon.utils.NumberUtils;
-import me.HeyAwesomePeople.Tycoon.world.plots.plotparts.Cuboid;
+import me.HeyAwesomePeople.Tycoon.utils.Cuboid;
 import me.HeyAwesomePeople.Tycoon.world.plots.plotparts.Region;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -27,15 +29,17 @@ import java.util.List;
 public class PlotManager {
 
     private Tycoon plugin;
+    private RentManager rentManager;
 
     private HashMap<World, HashMap<Integer, Plot>> plots = new HashMap<>();
-    private MongoDBManager manager;
+    private SyncMongoDBManager manager;
 
     private Document document;
 
     public PlotManager(Tycoon plugin) {
         this.plugin = plugin;
-        this.manager = plugin.getMongoDBManager();
+        this.manager = plugin.getSyncMongoDBManager();
+        this.rentManager = new RentManager(plugin);
 
         loadDocument();
 
@@ -88,21 +92,19 @@ public class PlotManager {
     }
 
     private void loadDocument() {
-        MongoCollection<Document> c = manager.getCollection(MongoDBManager.COLL_PLOTDATA);
+        MongoCollection<Document> c = manager.getCollection(Collection.PLOTDATA.getCollName());
 
-        c.find().first((document, throwable) -> {
-            if (document == null) {
-                createNewDocument();
-            } else {
-                PlotManager.this.document = document;
-            }
-        });
+        Document doc = c.find().first();
+        if (doc == null) {
+            createNewDocument();
+        } else {
+            this.document = doc;
+        }
     }
 
     private void createNewDocument() {
         document = new Document();
-        manager.getCollection(MongoDBManager.COLL_USERDATA).insertOne(this.document,
-                (Void result, final Throwable t) -> Debug.debug(DebugType.INFO, "Successfully inserted document for PlotData."));
+        manager.getCollection(Collection.PLOTDATA.getCollName()).insertOne(document);
     }
 
     public void savePlotsIntoConfig() {

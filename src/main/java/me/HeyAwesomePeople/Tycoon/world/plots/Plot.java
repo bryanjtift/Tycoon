@@ -1,18 +1,18 @@
 package me.HeyAwesomePeople.Tycoon.world.plots;
 
-import com.mongodb.async.client.MongoCollection;
+import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import lombok.Setter;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
-import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
+import me.HeyAwesomePeople.Tycoon.mongodb.*;
+import me.HeyAwesomePeople.Tycoon.mongodb.Collection;
 import me.HeyAwesomePeople.Tycoon.utils.Debug;
 import me.HeyAwesomePeople.Tycoon.utils.DebugType;
 import me.HeyAwesomePeople.Tycoon.utils.LocationUtils;
-import me.HeyAwesomePeople.Tycoon.world.plots.plotparts.Cuboid;
+import me.HeyAwesomePeople.Tycoon.utils.Cuboid;
 import me.HeyAwesomePeople.Tycoon.world.plots.plotparts.Region;
-import me.HeyAwesomePeople.Tycoon.world.plots.plotparts.ZoneVector;
+import me.HeyAwesomePeople.Tycoon.utils.ZoneVector;
 import org.bson.Document;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
@@ -40,7 +40,7 @@ public class Plot {
     @Getter private Rent rent;
 
     // database stuff
-    private MongoDBManager manager;
+    private SyncMongoDBManager manager;
     private Document document;
 
     // information loaded from database, if present
@@ -56,7 +56,7 @@ public class Plot {
         this.address = address;
         this.regions = regions;
 
-        this.manager = plugin.getMongoDBManager();
+        this.manager = plugin.getSyncMongoDBManager();
 
         Configuration config = plugin.getConfigManager().getConfig("plots");
 
@@ -84,18 +84,15 @@ public class Plot {
     }
 
     private void loadDocument() {
-        MongoCollection<Document> c = manager.getCollection(MongoDBManager.COLL_PLOTDATA);
-        c.find().first((document, throwable) -> {
-            if (document == null) {
-                Bukkit.getConsoleSender().sendMessage("Created new document.");
-                Plot.this.document = new Document();
-                manager.getCollection(MongoDBManager.COLL_USERDATA).insertOne(this.document,
-                        (Void result, final Throwable t) -> Debug.debug(DebugType.INFO, "Successfully inserted document for PlotData."));
-            } else {
-                Bukkit.getConsoleSender().sendMessage("Reused old document.");
-                Plot.this.document = document;
-            }
-        });
+        MongoCollection<Document> c = manager.getCollection(Collection.PLOTDATA.getCollName());
+        Document doc = c.find().first();
+
+        if (doc == null) {
+             this.document = new Document();
+             manager.getCollection(Collection.PLOTDATA.getCollName()).insertOne(this.document);
+        } else {
+            this.document = doc;
+        }
     }
 
     public void addCuboidToRegion(Integer id, Integer[] points) {

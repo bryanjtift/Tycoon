@@ -5,7 +5,8 @@ import com.mongodb.async.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import lombok.Getter;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
-import me.HeyAwesomePeople.Tycoon.mongodb.MongoDBManager;
+import me.HeyAwesomePeople.Tycoon.mongodb.ASyncMongoDBManager;
+import me.HeyAwesomePeople.Tycoon.mongodb.Collection;
 import me.HeyAwesomePeople.Tycoon.utils.Debug;
 import me.HeyAwesomePeople.Tycoon.utils.DebugType;
 import org.bson.Document;
@@ -17,7 +18,7 @@ import java.util.Vector;
 public class UserDataManager {
 
     private Tycoon plugin;
-    private MongoDBManager manager;
+    private ASyncMongoDBManager manager;
 
     private Vector<Boolean> isReady = new Vector<>();
 
@@ -30,7 +31,7 @@ public class UserDataManager {
 
     public UserDataManager(final Tycoon plugin, UUID id, String username, final MongoCollection<Document> collection) {
         this.plugin = plugin;
-        this.manager = plugin.getMongoDBManager();
+        this.manager = plugin.getASyncMongoDBManager();
         this.id = id;
         this.username = username;
         isReady.add(false);
@@ -81,12 +82,12 @@ public class UserDataManager {
 
     private void createNewDocument() {
         document = new Document("uuid", id.toString()).append("name", this.username);
-        manager.getCollection(MongoDBManager.COLL_USERDATA).insertOne(this.document,
+        manager.getCollection(Collection.USERDATA.getCollName()).insertOne(this.document,
                 (Void result, final Throwable t) -> Debug.debug(DebugType.INFO, "Successfully inserted document for '" + this.id.toString() + "'."));
     }
 
     public void updateDocument() {
-        manager.getCollection(MongoDBManager.COLL_USERDATA).replaceOne(Filters.regex("uuid", this.id.toString()), this.document, (updateResult, throwable) -> {
+        manager.getCollection(Collection.USERDATA.getCollName()).replaceOne(Filters.regex("uuid", this.id.toString()), this.document, (updateResult, throwable) -> {
             if (updateResult == null) {
                 Debug.debug(DebugType.ERROR, "Update Result Null");
                 return;

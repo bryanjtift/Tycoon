@@ -10,20 +10,15 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MongoDBManager {
-
-    public static String MONGO_DATABASE = "tycoon";
-    public static String COLL_USERDATA = "userdata";
-    public static String COLL_TYCOONDATA = "tycoondata";
-    public static String COLL_PLOTDATA = "plotdata";
+public class ASyncMongoDBManager {
 
     private MongoDatabase database;
     private HashMap<String, MongoCollection> collections = new HashMap<>();
 
-    public MongoDBManager() {
-        Debug.debug(DebugType.INFO, "Starting MongoDB client...");
+    public ASyncMongoDBManager() {
+        Debug.debug(DebugType.INFO, "Starting ASync'd MongoDB client...");
         ASyncMongoStarter starter = new ASyncMongoStarter();
-        database = starter.getDatabase(MONGO_DATABASE);
+        database = starter.getDatabase(Database.MONGO_DATABASE.getDBName());
 
         database.listCollectionNames().into(new ArrayList<>(), (strings, throwable) -> {
             for (String coll : strings) {
@@ -32,7 +27,7 @@ public class MongoDBManager {
 
             Debug.debug(DebugType.INFO, "Loaded Collections: " + collections.keySet().toString());
         });
-        Debug.debug(DebugType.INFO, "MongoDB successfully connected.");
+        Debug.debug(DebugType.INFO, "ASync'd MongoDB successfully connected.");
     }
 
     public MongoCollection<Document> getCollection(String name) {
