@@ -28,7 +28,7 @@ import java.util.HashMap;
             saveDefaultConfig(name);
         }
 
-        customFiles.computeIfAbsent(ymlName, n -> file);
+        customFiles.putIfAbsent(ymlName, file);
         customConfigs.put(ymlName, YamlConfiguration.loadConfiguration(customFiles.get(ymlName)));
 
         // Look for defaults in the jar
@@ -50,11 +50,11 @@ import java.util.HashMap;
     public void saveConfig(String name) {
         String ymlName = name + ".yml";
         if (!customConfigs.containsKey(ymlName)
-                || customFiles.containsKey(ymlName)) {
+                || !customFiles.containsKey(ymlName)) {
             return;
         }
         try {
-            getConfig(ymlName).save(customFiles.get(ymlName));
+            getConfig(name).save(customFiles.get(ymlName));
         } catch (IOException e) {
             Debug.debug(DebugType.ERROR, "Could not save config '" + ymlName + "' to " + customFiles.get(ymlName));
             e.printStackTrace();

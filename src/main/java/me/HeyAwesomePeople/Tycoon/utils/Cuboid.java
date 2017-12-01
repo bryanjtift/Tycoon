@@ -7,8 +7,8 @@ import org.bukkit.World;
 @RequiredArgsConstructor
 public class Cuboid {
     private final World world;
-    private final int[] point1;
-    private final int[] point2;
+    private final Integer[] point1;
+    private final Integer[] point2;
 
     public Location getPoint1() {
         return new Location(world, point1[0], point1[1], point1[2]);

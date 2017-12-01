@@ -22,8 +22,12 @@ public class Region {
         return cuboids;
     }
 
-    public void addCuboid(int[] point1, int[] point2) {
+    public void addCuboid(Integer[] point1, Integer[] point2) {
         cuboids.add(new Cuboid(world, point1, point2));
+    }
+
+    public void addCuboid(Cuboid c) {
+        cuboids.add(c);
     }
 
 

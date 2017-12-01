@@ -1,6 +1,8 @@
 package me.HeyAwesomePeople.Tycoon.players;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import me.HeyAwesomePeople.Tycoon.datamanaging.Statistics;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -14,8 +16,19 @@ public class PlayerSkills {
     @Getter private TycoonPlayer tycoonPlayer;
     @Getter private HashMap<Skill, Integer> skills = new HashMap<>();
 
+    private Statistics stats;
+
     public PlayerSkills(TycoonPlayer tycoonPlayer) {
         this.tycoonPlayer = tycoonPlayer;
+        this.stats = tycoonPlayer.getDataManager().getStats();
+
+        for (Skill s : Skill.values()) {
+            if (stats.hasKey(s.getSkillString())) {
+                skills.put(s, stats.getInt(s.getSkillString()));
+            } else {
+                skills.put(s, 0);
+            }
+        }
     }
 
     public void addSkillValue(Skill skill, Integer value) {
@@ -30,15 +43,19 @@ public class PlayerSkills {
         return skills.get(skill);
     }
 
-    public void updateSkills() {
-
+    public void saveSkillsData() {
+        for (Skill s : Skill.values()) {
+            stats.setInt(s.getSkillString(), skills.getOrDefault(s, 0));
+        }
     }
 
-    public enum Skill {
-        SCIENCE,
-        TECH,
-        ENGINEER,
-        MEDICAL;
+    @RequiredArgsConstructor public enum Skill {
+        SCIENCE("scienceskill"),
+        TECH("techskill"),
+        ENGINEER("engineerskill"),
+        MEDICAL("medicalskill");
+
+        @Getter private final String skillString;
     }
 
 }

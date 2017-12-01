@@ -1,6 +1,9 @@
 package me.HeyAwesomePeople.Tycoon.utils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author HeyAwesomePeople
@@ -34,4 +37,7 @@ public class NumberUtils {
         return list.length;
     }
 
+    public static Integer firstMissingNum(Set<Integer> list) {
+        return firstMissingNum(new ArrayList<>(list));
+    }
 }

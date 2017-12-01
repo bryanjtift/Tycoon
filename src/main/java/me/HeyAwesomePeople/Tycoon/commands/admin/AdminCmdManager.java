@@ -1,6 +1,8 @@
 package me.HeyAwesomePeople.Tycoon.commands.admin;
 
 import me.HeyAwesomePeople.Tycoon.Tycoon;
+import me.HeyAwesomePeople.Tycoon.world.WorldManager;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,10 +36,37 @@ public class AdminCmdManager implements CommandExecutor {
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("setspawnlocation")) {
                         if (!(sender instanceof ConsoleCommandSender)) {
-                            new SetNewSpawnLocation(plugin, ((Player) sender).getLocation());
+                            new SetNewSpawnLocation(plugin, ((Player) sender).getLocation()).set();
                         } else {
                             //TODO console cannot run this command
                         }
+                    }
+                    if (args[0].equalsIgnoreCase("worldinfo")) {
+                        if (!(sender instanceof ConsoleCommandSender)) {
+                            Player p = (Player) sender;
+                            p.sendMessage(ChatColor.AQUA + "World: " + p.getLocation().getWorld().getName());
+                        } else {
+                            //TODO console cannot run this command
+                        }
+                    }
+                }
+                if (args.length == 2) {
+                    if (args[0].equalsIgnoreCase("tpworld")) {
+                        if (!(sender instanceof ConsoleCommandSender)) {
+                            if (!args[1].equalsIgnoreCase("overworld")
+                                    || !args[1].equalsIgnoreCase("underworld")) {
+                                new TeleportToWorld(plugin).teleport(((Player) sender), args[1]);
+                            } else {
+                                new TeleportToWorld(plugin).teleport(((Player) sender), WorldManager.Worlds.valueOf(args[1]));
+                            }
+                        } else {
+                            //TODO console cannot run this command
+                        }
+                    }
+                }
+                if (args.length == 3) {
+                    if (args[0].equalsIgnoreCase("setworldborder")) {
+                        new SetNewWorldBorder(plugin, Integer.parseInt(args[2])).set(WorldManager.Worlds.valueOf(args[1]));
                     }
                 }
             }

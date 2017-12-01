@@ -34,7 +34,7 @@ import java.util.Date;
         stats.setString("lastlogout", String.valueOf(new Date().getTime()));
 
         // update data to mongo
-        plugin.getPlayerManager().getPlayer(e.getPlayer().getUniqueId()).getDataManager().updateDocument();
+        plugin.getPlayerManager().getPlayer(e.getPlayer().getUniqueId()).unloadPlayer();
 
         ActionBarBuilder.clear(e.getPlayer());
         BossBarBuilder.clear(e.getPlayer());

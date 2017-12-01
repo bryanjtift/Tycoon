@@ -1,4 +1,6 @@
 overworld:
-  fileName: "Overworld"
+  fileName: "overworld"
+  borderRadius: 5000
 underworld:
-  fileName: "Underworld"
+  fileName: "overworld_nether"
+  borderRadius: 3500

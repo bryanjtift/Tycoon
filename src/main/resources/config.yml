@@ -2,3 +2,4 @@ new_player:
   joinMsg: "&7Welcome, %player%"
 returning_player:
   joinMsg: "&7Welcome back, %player%"
+debug: true

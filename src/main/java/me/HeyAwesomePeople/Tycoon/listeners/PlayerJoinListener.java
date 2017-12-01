@@ -47,9 +47,9 @@ import java.util.Date;
 
             stats.setString("firstlogin", String.valueOf(new Date().getTime()));
 
-            new TitleBuilder(e.getPlayer()).title(plugin.getConfigManager().getConfig("config").getString("new_player.joinMsg")).stay(30).send();
+            new TitleBuilder(e.getPlayer()).title(plugin.getConfigManager().getConfig("config").getString("new_player.joinMsg")).stay(2).send();
         } else {
-            new TitleBuilder(e.getPlayer()).title(plugin.getConfigManager().getConfig("config").getString("returning_player.joinMsg")).stay(30).send();
+            new TitleBuilder(e.getPlayer()).title(plugin.getConfigManager().getConfig("config").getString("returning_player.joinMsg")).stay(2).send();
         }
 
         // make sure they have downloaded resource pack

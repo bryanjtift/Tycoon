@@ -14,10 +14,10 @@ import org.bukkit.command.CommandSender;
     private final Tycoon plugin;
     private final CommandSender sender;
 
-    public void add(World world, PlotType type, Location location, Region... region) {
-        plugin.getPlotManager().addNewPlot(world, type, location, region);
+    public void add(PlotType type, Location location) {
+        Plot p = plugin.getPlotManager().createPlot(type, location);
 
-        sender.sendMessage(""); //TODO
+        sender.sendMessage("Plot with id '" + p.getPlotId() + "' was created."); //TODO give more information about it
     }
 
 }

@@ -1,9 +1,9 @@
 package me.HeyAwesomePeople.Tycoon.players;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.HeyAwesomePeople.Tycoon.Tycoon;
 import me.HeyAwesomePeople.Tycoon.datamanaging.UserDataManager;
-import me.HeyAwesomePeople.Tycoon.mongodb.ASyncMongoDBManager;
 import me.HeyAwesomePeople.Tycoon.mongodb.Collection;
 import org.bukkit.entity.Player;
 
@@ -28,7 +28,9 @@ public class TycoonPlayer {
     @Getter private PlayerPhysical physical;
     @Getter private PlayerRole role;
 
-    @Getter private List<String> achievements = new ArrayList<String>();
+    @Getter @Setter private Integer karma;
+
+    @Getter private List<String> achievements = new ArrayList<>();
 
     public TycoonPlayer(Tycoon plugin, UUID playerID, String username) {
         this.plugin = plugin;
@@ -38,14 +40,47 @@ public class TycoonPlayer {
         this.dataManager = new UserDataManager(plugin, playerID, username, plugin.getASyncMongoDBManager().getCollection(Collection.USERDATA.getCollName()));
 
         this.skills = new PlayerSkills(this);
-        // TODO setSkills
+        skills.saveSkillsData();
 
-        this.physical = new PlayerPhysical(playerID, 0, 0);
-        // TODO setStamina and Fitness
+        this.physical = new PlayerPhysical(this);
+        physical.savePhysicalData();
 
-        this.role = PlayerRole.CIVILIAN;
+        setupRole();
+        setupKarma();
     }
 
+    private void setupRole() {
+        if (dataManager.getAttributes().hasKey("playerrole")) {
+            this.role = PlayerRole.valueOf(dataManager.getAttributes().getString("playerrole"));
+        } else {
+            this.role = PlayerRole.CIVILIAN;
+        }
+    }
 
+    private void addKarma(int value) {
+        this.karma += value;
+    }
+
+    private void removeKarma(int value) {
+        this.karma -= value;
+    }
+
+    private void setupKarma() {
+        if (dataManager.getStats().hasKey("karma")) {
+            this.karma = dataManager.getStats().getInt("karma");
+        } else {
+            this.karma = 0;
+            dataManager.getStats().setInt("karma", 0);
+        }
+    }
+
+    public void unloadPlayer() {
+        dataManager.getStats().setInt("karma", karma);
+        dataManager.getStats().setString("playerrole", role.getName());
+        skills.saveSkillsData();
+        physical.savePhysicalData();
+
+        dataManager.updateDocument();
+    }
 
 }

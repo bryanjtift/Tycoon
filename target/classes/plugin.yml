@@ -1,5 +1,5 @@
 name: Tycoon
-depend: []
+softdepend: [HolographicDisplays]
 author: HeyAwesomePeople
 main: me.HeyAwesomePeople.Tycoon.Tycoon
 version: 1.0

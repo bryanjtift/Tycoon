@@ -37,16 +37,16 @@ public class Plot {
     @Getter private HashMap<Integer, Region> regions = new HashMap<>();
 
     // from config/set later, default to default
-    @Getter private Rent rent;
+    @Getter @Setter private Rent rent;
 
     // database stuff
     private SyncMongoDBManager manager;
     private Document document;
 
     // information loaded from database, if present
-    @Getter private UUID owner;
-    @Getter private List<UUID> members = new ArrayList<>();
-    @Getter private long rentlastpaid = -1;
+    @Setter @Getter private UUID owner;
+    @Setter @Getter private List<UUID> members = new ArrayList<>();
+    @Setter @Getter private long rentlastpaid = -1;
 
     Plot(Tycoon plugin, World world, Integer id, PlotType type, Location address, HashMap<Integer, Region> regions) {
         this.plugin = plugin;
@@ -55,6 +55,25 @@ public class Plot {
         this.plotType = type;
         this.address = address;
         this.regions = regions;
+
+        this.manager = plugin.getSyncMongoDBManager();
+
+        Configuration config = plugin.getConfigManager().getConfig("plots");
+
+        loadDocument();
+        loadDatabaseInfo();
+    }
+
+    Plot(Tycoon plugin, World world, Integer id, PlotType type, Location address, HashMap<Integer, Region> regions, UUID owner, List<UUID> members, long rentLastPaid) {
+        this.plugin = plugin;
+        this.world = world;
+        this.plotId = id;
+        this.plotType = type;
+        this.address = address;
+        this.regions = regions;
+        this.owner = owner;
+        this.members = members;
+        this.rentlastpaid = rentLastPaid;
 
         this.manager = plugin.getSyncMongoDBManager();
 
@@ -110,6 +129,14 @@ public class Plot {
 
     public void reload() {
         //TODO
+    }
+
+    public void addMember(UUID id) {
+        this.members.add(id);
+    }
+
+    public void removeMember(UUID id) {
+        this.members.remove(id);
     }
 
     public void save() {

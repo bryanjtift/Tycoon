@@ -6,10 +6,7 @@ import me.HeyAwesomePeople.Tycoon.utils.Debug;
 import me.HeyAwesomePeople.Tycoon.utils.DebugType;
 import me.HeyAwesomePeople.Tycoon.utils.LocationUtils;
 import me.HeyAwesomePeople.Tycoon.world.plots.PlotManager;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 
 /**
  * @author HeyAwesomePeople
@@ -20,7 +17,9 @@ public class WorldManager {
     private Tycoon plugin;
 
     @Getter private World overworld;
+    @Getter private Integer overworldBorderRadius;
     @Getter private World underworld;
+    @Getter private Integer underworldBorderRadius;
 
     @Getter private Location spawnPoint;
 
@@ -32,7 +31,32 @@ public class WorldManager {
         loadWorldIfExist();
         loadNetherIfExist();
 
-        reloadSpawnPoint();
+        reloadBorders();
+        setupWorldBorders();
+
+        reloadOverworldSpawnPoint();
+    }
+
+    public void reloadBorders() {
+        this.overworldBorderRadius = plugin.getConfigManager().getConfig("worlds").getInt("overworld.borderRadius", 5000);
+        this.underworldBorderRadius = plugin.getConfigManager().getConfig("worlds").getInt("underworld.borderRadius", 5000);
+
+        Debug.debug(DebugType.INFO, "Loaded border radius for overworld with value '" + overworldBorderRadius + "'.");
+        Debug.debug(DebugType.INFO, "Loaded border radius for underworld with value '" + underworldBorderRadius + "'.");
+
+        setupWorldBorders();
+    }
+
+    private void setupWorldBorders() {
+        WorldBorder border = overworld.getWorldBorder();
+        border.setCenter(0, 0);
+        border.setSize(overworldBorderRadius);
+        border.setWarningDistance(10);
+
+        WorldBorder border2 = underworld.getWorldBorder();
+        border2.setCenter(0, 0);
+        border2.setSize(underworldBorderRadius);
+        border2.setWarningDistance(10);
     }
 
     private void loadWorldIfExist() {
@@ -51,13 +75,25 @@ public class WorldManager {
         underworld = Bukkit.createWorld(new WorldCreator(worldName).environment(World.Environment.NETHER));
     }
 
-    public void reloadSpawnPoint() {
-        if (plugin.getConfigManager().getConfig("config").contains("new_player.location")) {
-            spawnPoint = LocationUtils.stringToLocation(plugin.getConfigManager().getConfig("config").getString("new_player.location"));
+    public void reloadOverworldSpawnPoint() {
+        if (plugin.getConfigManager().getConfig("worlds").contains("overworld.spawnpoint")) {
+            spawnPoint = LocationUtils.stringToLocation(plugin.getConfigManager().getConfig("worlds").getString("overworld.spawnpoint"), overworld);
         } else {
             spawnPoint = overworld.getSpawnLocation();
-            Debug.debug(DebugType.WARNING, "Unable to find spawn location for new players. Defaulted to the natural spawn location.");
+            Debug.debug(DebugType.WARNING, "Unable to find spawn location the overworld. Defaulted to the natural spawn location.");
         }
+    }
+
+    public enum Worlds {
+        OVERWORLD("overworld"),
+        UNDERWORLD("underworld");
+
+        @Getter String worldName;
+
+        Worlds(String w) {
+            this.worldName = w;
+        }
+
     }
 
 }
